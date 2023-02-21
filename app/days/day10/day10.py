@@ -7,11 +7,9 @@ def first_part():
         for line in file:
             line = line.strip().split()
             if len(line) == 1:
-                # print("noop")
                 signal_strength, cycle = tick(cycle, cycle_checks,
                                               register, signal_strength)
             else:
-                # print(f"wait for {line[1]}")
                 for _ in range(2):
                     signal_strength, cycle = tick(cycle, cycle_checks,
                                                   register, signal_strength)
@@ -32,10 +30,8 @@ def tick_2(cycle: int, pixel_lines: list[list],
         pixel_lines.append([])
         current_line = pixel_lines[-1]
     index = cycle % 40 - 1
-    if register - 1 <= index <= register + 1:
-        current_line.append("#")
-    else:
-        current_line.append(".")
+    (current_line.append("#") if register - 1 <= index <= register + 1
+     else current_line.append("."))
     cycle += 1
     return current_line, pixel_lines, cycle
 
@@ -49,11 +45,9 @@ def second_part():
         for line in file:
             line = line.strip().split()
             if len(line) == 1:
-                # print("noop")
                 current_line, pixel_lines, cycle = tick_2(
                     cycle, pixel_lines, current_line, register)
             else:
-                # print(f"wait for {line[1]}")
                 for _ in range(2):
                     current_line, pixel_lines, cycle = tick_2(
                         cycle, pixel_lines, current_line, register)
