@@ -29,9 +29,9 @@ def compare_pair(first_pair, second_pair):
         except:
             return -1
         if type(element) == int and type(second_element) == int:
-            if element < second_pair[index]:
+            if element < second_element:
                 return 1
-            elif element > second_pair[index]:
+            elif element > second_element:
                 return -1
         elif type(element) == list and type(second_element) == int:
             new_compare = compare_pair(element, [second_element])
@@ -70,9 +70,6 @@ def second_part():
         if packet == [[2]] or packet == [[6]]:
             tot *= abs(sum(
                 [_ for _ in list(map(lambda p: compare_pair(packet, p),
-                                     packets)) if _ < 0])) + 1
+                                     packets)) if _ < 0]
+            )) + 1
     return tot
-
-
-
-
