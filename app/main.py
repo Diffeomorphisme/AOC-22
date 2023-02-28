@@ -1,4 +1,4 @@
-from app.days.day14.day14 import first_part, second_part
+from app.days.day15.day15 import first_part, second_part
 
 
 if __name__ == "__main__":
