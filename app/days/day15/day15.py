@@ -42,45 +42,68 @@ def first_part():
     target_line = 2000000
     # target_line = 10
     (sensors, beacons, [min_x, max_x, min_y, max_y]) = read_file()
-    sensor_map = []
     distances = []
-    # for i in range(min_x, max_x + 1):
-    #     line = []
-    #     for j in range(min_y, max_y + 1):
-    #         if (i, j) in sensors:
-    #             line.append("S")
-    #         elif (i, j) in beacons:
-    #             line.append("B")
-    #         else:
-    #             line.append(".")
-    #     print("".join(line))
-    #     sensor_map.append(line)
-
+    unique_beacons = tuple(beacon for beacon in set(beacons))
     for index, sensor in enumerate(sensors):
         sensor_beacon_distance = calculate_distance(sensor, beacons[index])
         distances.append(sensor_beacon_distance)
-        print(sensor, beacons[index], sensor_beacon_distance)
-    found = False
     tot = 0
-    j = target_line
-    for i in range(min_x, max_x + 1):
-        print(i)
-        if (i, j) not in sensors and (i, j) not in beacons:
-            max_distance = -1
-            for sensor_index, sensor in enumerate(sensors):
-                distance = distances[sensor_index] - calculate_distance(sensor, (i, j))
-                if distance > max_distance:
-                    max_distance = distance
-            if max_distance >= 0:
-                if i == min_x or i == max_x:
-                    # print(max_distance)
-                    tot += 1 + max_distance
-                else:
-                    tot += 1
-                # print("found")
-
+    # j = target_line
+    # sensors_beacons = sum([1 for sensor in sensors if sensor[1] == j]) + sum(
+    #     [1 for beacon in unique_beacons if beacon[1] == j])
+    # for i in range(min_x, max_x + 1):
+    #     print(i)
+    #     max_distance = -1
+    #     for sensor_index, sensor in enumerate(sensors):
+    #         distance = distances[sensor_index] - calculate_distance(sensor, (i, j))
+    #         if distance > max_distance:
+    #             max_distance = distance
+    #     if max_distance >= 0:
+    #         if i == min_x or i == max_x:
+    #             tot += 1 + max_distance
+    #         else:
+    #             tot += 1
+    # tot -= sensors_beacons
     return tot
 
 
 def second_part():
-    pass
+    sensors: tuple[tuple[int, int]]
+    beacons: tuple[tuple[int, int]]
+    min_x: int
+    max_x: int
+    min_y: int
+    max_y: int
+    allowed_min_x = 0
+    # allowed_max_x = 4000000
+    allowed_max_x = 20
+    allowed_min_y = 0
+    # allowed_max_y = 4000000
+    allowed_max_y = 20
+    (sensors, beacons, [min_x, max_x, min_y, max_y]) = read_file()
+    distances = []
+    for index, sensor in enumerate(sensors):
+        sensor_beacon_distance = calculate_distance(sensor, beacons[index])
+        distances.append(sensor_beacon_distance)
+    i = 0
+    j = 0
+    while True:
+        min_distance = allowed_max_x + allowed_max_y
+        for index, sensor in enumerate(sensors):
+            distance = calculate_distance(sensor, (i, j)) - distances[index]
+            if distance < min_distance:
+                min_distance = distance
+        if min_distance < 0:
+            i += abs(distance)
+        elif min_distance == 0:
+            i += 1
+        else:
+            return i * 4000000 + j
+        if i > allowed_max_x:
+            j += i // allowed_max_x
+            i %= allowed_max_x
+            print(i, j)
+
+
+
+
